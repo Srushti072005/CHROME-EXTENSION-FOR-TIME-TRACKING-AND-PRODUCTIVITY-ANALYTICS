@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeWise - Website Productivity Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        .dashboard-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .website-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #4f46e5;
+            color: #4f46e5;
+        }
+
+        .tab {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover:not(.tab-active) {
+            color: #6366f1;
+            border-bottom: 3px solid #e0e7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                                    <div class="flex items-center space-x-4">
+                        <div class="bg-indigo-600 text-white p-2 rounded-lg mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9" />
+                            </svg>
+                        </div>
+                        <h1 class="text-xl font-bold text-gray-800">Timewise</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add Website Category
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Dashboard Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Productivity Dashboard</h2>
+                <p class="text-gray-600">Track and analyze your online time usage</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <select id="time-range" class="appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm text-gray-700">
+                        <option>This Week</option>
+                        <option>Last Week</option>
+                        <option>This Month</option>
+                        <option>Last Month</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95L7.707 11.364 1.414 17.657 10.828 8.243 5.757 6.586 4.343 8" />
+                        </svg>
+                    </div>
+                </div>
+                <button class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium border border-gray-300 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1.5M3 20h18M16 4v16M8 4v16" />
+                    </svg>
+                    Export Report
+                </button>
+            </div>
+        </div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="dashboard-card bg-white p-6">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Total Time Online</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1">38h 14m</h3>
+            </div>
+            <div class="bg-blue-100 p-2 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3" />
+                </svg>
+            </div>
+        </div>
+        <div class="mt-4">
+            <p class="text-sm text-gray-600">
+                <span class="text-green-600 font-medium">↑ 12%</span> vs last week
+            </p>
+        </div>
+    </div>
+
+    <div class="dashboard-card bg-white p-6">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="text-sm font-medium text-gray-500">Productive Time</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1">24h 42m</h3>
+            </div>
+            <div class="bg-green-100 p-2 rounded-lg">
+<div class="mt-4">
+  <p class="text-sm text-gray-600">
+    <span class="text-green-600 font-medium">↑ 8%</span> vs last week
+  </p>
+</div>
+
+<div class="dashboard-card bg-white p-6">
+  <div class="flex justify-between items-start">
+    <div>
+      <p class="text-sm font-medium text-gray-500">Unproductive Time</p>
+      <h3 class="text-2xl font-bold text-gray-800 mt-1">13h 32m</h3>
+    </div>
+    <div class="bg-red-100 p-2 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <p class="text-sm text-gray-600">
+      <span class="text-red-600 font-medium">↑ 3%</span> vs last week
+    </p>
+  </div>
+</div>
+<div class="dashboard-card bg-white p-6">
+  <div class="flex justify-between items-start">
+    <div>
+      <p class="text-sm font-medium text-gray-500">Productivity Score</p>
+      <h3 class="text-2xl font-bold text-gray-800 mt-1">64.7%</h3>
+    </div>
+    <div class="bg-purple-100 p-2 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6a2 2 0 0 1 2-2h4" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <p class="text-sm text-gray-600">
+      <span class="text-green-600 font-medium">↑ 5.2%</span> vs last week
+    </p>
+  </div>
+</div>
+
+<!-- Main Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+  <div class="dashboard-card bg-white p-6 lg:col-span-2">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Weekly Time Distribution</h3>
+    <div class="h-80">
+      <canvas id="weeklyChart"></canvas>
+    </div>
+  </div>
+</div>
+<div class="dashboard-card bg-white p-6">
+  <h3 class="text-lg font-semibold text-gray-800 mb-4">Productivity Breakdown</h3>
+  <div class="h-40 flex items-center justify-center">
+    <canvas id="piechart"></canvas>
+  </div>
+
+  <div class="mt-4 grid grid-cols-2 gap-4">
+    <div class="flex items-center">
+      <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+      <span class="text-sm text-gray-600">Productive</span>
+    </div>
+
+    <div class="flex items-center">
+      <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+      <span class="text-sm text-gray-600">Unproductive</span>
+    </div>
+
+    <div class="flex items-center">
+      <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+      <span class="text-sm text-gray-600">Neutral</span>
+    </div>
+
+    <div class="flex items-center">
+      <div class="w-3 h-3 rounded-full bg-gray-300 mr-2"></div>
+      <span class="text-sm text-gray-600">Uncategorized</span>
+    </div>
+  </div>
+</div>
+
+<!-- Website Breakdown -->
+<div class="dashboard-card bg-white p-6 mb-8">
+<div class="flex justify-between items-center mb-6">
+  <h3 class="text-lg font-semibold text-gray-800">Website Breakdown</h3>
+  <div class="flex space-x-4">
+    <div class="tab tab-active px-3 py-2 font-medium">All Websites</div>
+    <div class="tab px-3 py-2 font-medium text-gray-500">Productive</div>
+    <div class="tab px-3 py-2 font-medium text-gray-500">Unproductive</div>
+    <div class="tab px-3 py-2 font-medium text-gray-500">Uncategorized</div>
+  </div>
+</div>
+
+<div class="overflow-x-auto">
+  <table class="min-w-full">
+    <thead>
+      <tr class="border-b border-gray-200">
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"></th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"></th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"></th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="flex items-center">
+            <div class="website-icon bg-blue-600 mr-3">G</div>
+            <div class="text-sm font-medium text-gray-900">github.com</div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<td class="px-6 py-4 whitespace-nowrap">
+  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Productive</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8h 24m</td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <div class="w-full bg-gray-200 rounded-full h-2">
+    <div class="bg-green-500 h-2 rounded-full" style="width: 22%"></div>
+  </div>
+  <span class="text-xs text-gray-600">22%</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <span class="text-green-600">↑ 15%</span>
+</td>
+</tr>
+
+<tr>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex items-center">
+      <div class="website-icon bg-blue-500 mr-3">VS</div>
+      <div class="text-sm font-medium text-gray-900">visualstudio.com</div>
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Productive</span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">7h 12m</td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-green-500 h-2 rounded-full" style="width: 19%"></div>
+    </div>
+<span class="text-xs text-gray-600">19%</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+  <span class="text-green-600">↑ 8%</span>
+</td>
+</tr>
+
+<tr>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex items-center">
+      <div class="website-icon bg-blue-800 mr-3">S</div>
+      <div class="text-sm font-medium text-gray-900">stackoverflow.com</div>
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Productive</span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">5h 48m</td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-green-500 h-2 rounded-full" style="width: 15%"></div>
+    </div>
+    <span class="text-xs text-gray-600">15%</span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+    <span class="text-red-600">↓ 3%</span>
+  </td>
+</tr>
+<tr>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex items-center">
+      <div class="website-icon bg-blue-400 mr-3">T</div>
+      <div class="text-sm font-medium text-gray-900">twitter.com</div>
+    </div>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Unproductive</span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">4h 36m</td>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-red-500 h-2 rounded-full" style="width: 12%"></div>
+    </div>
+    <span class="text-xs text-gray-600">12%</span>
+  </td>
+  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+    <span class="text-red-600">↑ 7%</span>
+  </td>
+</tr>
+
+<tr>
+  <td class="px-6 py-4 whitespace-nowrap">
+    <div class="flex items-center">
+      <div class="website-icon bg-red-600 mr-3">Y</div>
+      <div class="text-sm font-medium text-gray-900">youtube.com</div>
+    </div>
+  </td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+    Uncategorized
+  </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3h 54m</td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <div class="w-full bg-gray-200 rounded-full h-2">
+    <div class="bg-yellow-500 h-2 rounded-full" style="width: 10%"></div>
+  </div>
+  <span class="text-xs text-gray-600">10%</span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+  <span class="text-green-600">↑ 2%</span>
+</td>
+</tr>
+
+<tr>
+<td class="px-6 py-4 whitespace-nowrap">
+  <div class="flex items-center">
+    <div class="website-icon bg-blue-900 mr-3">F</div>
+    <div class="text-sm font-medium text-gray-900">facebook.com</div>
+  </div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+    Unproductive
+  </span>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3h 12m</td>
+<td class="px-6 py-4 whitespace-nowrap">
+  <div class="w-full bg-gray-200 rounded-full h-2">
+    <div class="bg-red-500 h-2 rounded-full" style="width: 8%"></div>
+  </div>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+  <span class="text-red-600">↑ 5%</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- Productivity Goals -->
+<div class="dashboard-card bg-white p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h3 class="text-lg font-semibold text-gray-800">Productivity Goals</h3>
+    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors duration-200">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Add New Goal
+    </button>
+  </div>
+
+  <div class="space-y-6">
+    <div>
+      <div class="flex justify-between items-center mb-2">
+        <div>
+          <h4 class="text-sm font-medium text-gray-800">Increase productive time to 30 hours/week</h4>
+<p class="text-xs text-gray-500">24h 42m / 30h 0m</p>
+</div>
+<span class="text-sm font-medium text-green-600">82%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+  <div class="bg-green-500 h-2 rounded-full" style="width: 82%"></div>
+</div>
+</div>
+
+<div class="flex justify-between items-center mb-2">
+  <div>
+    <h4 class="text-sm font-medium text-gray-800">Reduce social media to 5 hours/week</h4>
+    <p class="text-xs text-gray-500">7h 48m / 5h 0m</p>
+  </div>
+  <span class="text-sm font-medium text-red-600">156%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+  <div class="bg-red-500 h-2 rounded-full" style="width: 100%"></div>
+</div>
+
+<div class="flex justify-between items-center mb-2">
+  <div>
+    <h4 class="text-sm font-medium text-gray-800">Achieve 70% productivity score</h4>
+    <p class="text-xs text-gray-500">64.7% / 70%</p>
+</div>
+<span class="text-sm font-medium text-yellow-600">93%</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-2">
+  <div class="bg-yellow-500 h-2 rounded-full" style="width: 93%"></div>
+</div>
+</div>
+</main>
+
+<script>
+// Weekly Time Distribution Chart
+const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+const weeklyChart = new Chart(weeklyCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    datasets: [
+      {
+        label: 'Productive',
+        data: [3.5, 4.2, 3.8, 5.1, 4.6, 2.1, 1.4],
+        backgroundColor: 'rgba(34, 197, 94, 0.7)',
+        borderColor: 'rgba(34, 197, 94, 1)',
+        borderWidth: 1
+      },
+      {
+        label: 'Unproductive',
+data: [1.8, 1.5, 2.2, 1.9, 2.4, 2.1, 1.6],
+        backgroundColor: 'rgba(239, 68, 68, 0.7)',
+        borderColor: 'rgba(239, 68, 68, 1)',
+        borderWidth: 1
+      },
+      {
+        label: 'Neutral',
+        data: [0.8, 0.6, 0.9, 1.2, 0.7, 1.5, 1.1],
+        backgroundColor: 'rgba(234, 179, 8, 0.7)',
+        borderColor: 'rgba(234, 179, 8, 1)',
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        stacked: true,
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        stacked: true,
+        title: {
+          display: true,
+plugins: {
+  legend: {
+    position: 'top',
+  },
+  tooltip: {
+    callbacks: {
+      label: function(context) {
+        return ${context.dataset.label}: ${context.raw} hours;
+      }
+    }
+  }
+}
+// Productivity Breakdown Pie Chart
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const pieChart = new Chart(pieCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Productive', 'Unproductive', 'Neutral', 'Uncategorized'],
+    datasets: [{
+      data: [64.7, 35.3, 8.2, 2.1],
+      backgroundColor: [
+        'rgba(34, 197, 94, 0.7)',
+        'rgba(239, 68, 68, 0.7)',
+        'rgba(234, 179, 8, 0.7)',
+        'rgba(209, 213, 219, 0.7)',
+      ],
+      borderColor: [
+        'rgba(34, 197, 94, 1)',
+        'rgba(239, 68, 68, 1)',
+        'rgba(234, 179, 8, 1)',
+        'rgba(209, 213, 219, 1)',
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+display: false
+},
+tooltip: {
+  callbacks: {
+    label: function(context) {
+      return ${context.label}: ${context.raw};
+    }
+  }
+},
+cutout: '65%'
+});
+
+// Tab switching functionality
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('tab-active');
+      t.classList.add('text-gray-500');
+    });
+    tab.classList.add('tab-active');
+    tab.classList.remove('text-gray-500');
+  });
+});
+</script>
+</body>
+</html>
