@@ -35,6 +35,9 @@ Export Functionality
 : Generate and download reports for deeper analysis or record-keeping.
 TimeWise helps users become more mindful of their digital habits, identify time sinks, and make data-driven decisions to improve online productivity. The clean, intuitive interface makes complex data easily digestible through color-coded indicators and responsive visualizations.
 
-
-
-
+#OUTPUT
+![Image](https://github.com/user-attachments/assets/6d6469b6-2708-412f-ab42-36ae3356894f)
+![Image](https://github.com/user-attachments/assets/fefa56a6-84f6-4c3e-8ad3-e15eab8020c7)
+![Image](https://github.com/user-attachments/assets/f2e28052-f4dc-4cac-a377-79f31baab407)
+![Image](https://github.com/user-attachments/assets/925a3ed0-1b38-4224-a071-a6e337c66c86)
+![Image](https://github.com/user-attachments/assets/906712a1-c97e-46f1-99f4-e9c2c80bf0e6)
